@@ -1,4 +1,4 @@
-from qdrant_client.models import Distance, VectorParams, Datatype
+from qdrant_client.models import Distance, VectorParams, Datatype, SparseVectorParams
 from app.configs.qdrant import get_qdrant_client
 
 
@@ -11,11 +11,16 @@ def create_collection():
     if not check_collection:
         client.create_collection(
             collection_name=COLLECTION_NAME,
-            vectors_config=VectorParams(
-                size=1024,
-                distance=Distance.COSINE,
-                datatype=Datatype.UINT8,
-            )
+            vectors_config={
+                "dense": VectorParams(
+                    size=384,
+                    distance=Distance.COSINE,
+                    datatype=Datatype.UINT8,
+                )
+            },
+            sparse_vectors_config={
+                "sparse": SparseVectorParams()
+            }
         )
         
         print(f"Collection '{COLLECTION_NAME}' created successfully.")

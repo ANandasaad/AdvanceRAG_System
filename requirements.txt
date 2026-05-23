@@ -10,3 +10,5 @@ tiktoken
 numpy
 pandas
 python-multipart
+fastembed
+langchain-huggingface
