@@ -26,7 +26,7 @@ prompt= PromptTemplate(
 )
 
 
-def rewrite_query(query:str) -> str:
+async def rewrite_query(query:str) -> str:
     chain = prompt | chat_ollama
     
     result= chain.invoke({"query": query})

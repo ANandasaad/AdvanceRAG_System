@@ -19,3 +19,22 @@ Question:
 
 Answer:
 """
+
+
+HALLUCINATION_PROMPT = """
+You are an evaluator.
+
+Determine whether the answer
+is fully supported by context.
+
+Context:
+{context}
+
+Answer:
+{answer}
+
+Return:
+SUPPORTED
+or
+HALLUCINATED
+"""
