@@ -13,7 +13,7 @@ def pipeline_ingestion(file_path):
      chunks = chunking(documents)
     
      # Step 3: Indexing
-     index_chunks(chunks)
+     index_chunks(chunks, file_path)
           
     
      print(f"Pipeline completed for file: {file_path}")

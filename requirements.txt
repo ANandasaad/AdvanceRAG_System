@@ -12,3 +12,6 @@ pandas
 python-multipart
 fastembed
 langchain-huggingface
+sentence-transformers
+torch
+langchain-ollama

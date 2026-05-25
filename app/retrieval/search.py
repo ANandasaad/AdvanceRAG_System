@@ -1,15 +1,14 @@
 from app.embeddings.embedder import get_dense_embedding, get_sparse_embedding
 from app.configs.qdrant import get_qdrant_client
 from qdrant_client.models import Fusion, FusionQuery
+from app.reranking.reranker import rerank
 COLLECTION_NAME = "rag_collection"
 
 async def search(query: str):
     # Placeholder for search logic
-
     client = get_qdrant_client()
     dense_vector = get_dense_embedding(query)
     sparse_vector = get_sparse_embedding(query)
-
     search_result = client.query_points(
         collection_name=COLLECTION_NAME,
         prefetch=[
@@ -33,5 +32,9 @@ async def search(query: str):
         
         
     )
-
-    return search_result
+    
+    
+    
+    
+    reranked_results = rerank(query, search_result.points)
+    return reranked_results

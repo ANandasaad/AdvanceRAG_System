@@ -1,8 +1,9 @@
 import os
 import shutil
 
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, HTTPException
 from app.ingestions.pipeline import pipeline_ingestion
+
 
 router = APIRouter()
 
@@ -18,6 +19,7 @@ async def upload_pdf(file:UploadFile = File(...)):
         pipeline_ingestion(file_path)
       return {"filename": file.filename, "message": "PDF uploaded successfully"}    
     except Exception as e:
-        return {"error": str(e)}
+      raise HTTPException(status_code=500, detail=f"Failed to upload PDF: {str(e)}") from e
+      
 
     

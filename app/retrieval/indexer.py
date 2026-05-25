@@ -12,16 +12,18 @@ from app.embeddings.embedder import (
     get_sparse_embedding
 )
 
+from app.ingestions.buildmeta_data import build_meta_data
+
 COLLECTION_NAME = "rag_collection"
 
 
-def index_chunks(chunks):
+def index_chunks(chunks, file_path: str):
 
     client = get_qdrant_client()
 
     points = []
 
-    for chunk in chunks:
+    for i, chunk in enumerate(chunks):
 
         text = (
             chunk.page_content
@@ -32,6 +34,12 @@ def index_chunks(chunks):
         dense = get_dense_embedding(text)
 
         sparse = get_sparse_embedding(text)
+        
+        metadata= build_meta_data(file_path, chunk_index=i)
+        
+        metadata["text"]= text
+        metadata["source"]= chunk.metadata.get("source", "unknown")
+        metadata["page"]= chunk.metadata.get("page", 0)
 
         point = PointStruct(
 
@@ -48,10 +56,9 @@ def index_chunks(chunks):
                     values=sparse["values"]
                 )
             },
-
-            payload={
-                "text": text
-            }
+            
+              
+            payload=metadata
         )
 
         points.append(point)
