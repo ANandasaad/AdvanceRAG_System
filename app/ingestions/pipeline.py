@@ -3,23 +3,23 @@ from app.ingestions.chunks import chunking
 from app.retrieval.indexer import index_chunks
 from fastapi import HTTPException
 import os
-def pipeline_ingestion(file_path):
+def pipeline_ingestion(document):
     
     try:
      # Step 1: Load PDF
-     documents = load_pdf(file_path)
+    #  documents = load_pdf(file_path)
     
      # Step 2: Chunking
-     chunks = chunking(documents)
+     chunks = chunking(document)
     
      # Step 3: Indexing
-     index_chunks(chunks, file_path)
+     index_chunks(chunks, document)
           
     
-     print(f"Pipeline completed for file: {file_path}")
+     print(f"Pipeline completed for file")
     except Exception as e:
-        print(f"Error processing file {file_path}: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to process file {file_path}") from e
+        print(f"Error processing file: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to process file ") from e
          
         
    

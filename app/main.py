@@ -3,11 +3,13 @@ from fastapi import FastAPI
 from app.retrieval.create_collection import create_collection
 from app.apis.upload_pdf import router as upload_pdf_router
 from app.apis.search import router as search_router
+from app.apis.load_data import router as load_data_router
 
 app = FastAPI(title= "Advanced RAG System", description= "An advanced Retrieval-Augmented Generation system using FastAPI and LangChain", version= "1.0.0")
 
 app.include_router(upload_pdf_router)
 app.include_router(search_router)
+app.include_router(load_data_router)
 
 
 @app.on_event("startup")

@@ -16,14 +16,14 @@ async def search_doc(query: str):
     answer = await generate_response(rewriten_query, context)
     hallucination_check = await check_hallucination(context, answer)
     
-    evaluation_data={
-        "question": rewriten_query,
-        "answer": answer,
-        "contexts": [doc["text"] for doc in results],
-        "ground_truth": ""
-    }
+    # evaluation_data={
+    #     "question": rewriten_query,
+    #     "answer": answer,
+    #     "contexts": [doc["text"] for doc in results],
+    #     "ground_truth": ""
+    # }
     
-    evaluation_result =  evaluate_model(evaluation_data)
+    # evaluation_result =  evaluate_model(evaluation_data)
     
     
     return {
@@ -32,7 +32,7 @@ async def search_doc(query: str):
         "answer": answer,
         "citations": citations,
         "hallucination_check": hallucination_check,
-        "evaluation":str(evaluation_result)
+        # "evaluation":str(evaluation_result)
     }    
 
     

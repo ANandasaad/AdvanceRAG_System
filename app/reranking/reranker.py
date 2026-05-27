@@ -19,8 +19,8 @@ def rerank(query, retrieved_docs):
                 "text": doc.payload['text'],
                 "qdrant_score": float(doc.score),
                 "re_rankscore": float(score),
-                "source": doc.payload.get("source", "unknown"),
-                "page": doc.payload.get("page", 0)
+                "source": doc.payload.get("source_type", "unknown"),
+                "doc_id": doc.payload.get("doc_id")
             })
 
         reranked_docs = sorted(scored_docs, key=lambda x: x['re_rankscore'], reverse=True)

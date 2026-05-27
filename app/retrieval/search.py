@@ -2,33 +2,36 @@ from app.embeddings.embedder import get_dense_embedding, get_sparse_embedding
 from app.configs.qdrant import get_qdrant_client
 from qdrant_client.models import Fusion, FusionQuery
 from app.reranking.reranker import rerank
-COLLECTION_NAME = "rag_collection"
+COLLECTION_NAME = "jira_chunks"
 
 async def search(query: str):
-    # Placeholder for search logic
     client = get_qdrant_client()
-    dense_vector = get_dense_embedding(query)
-    sparse_vector = get_sparse_embedding(query)
+
+    dense_vectors = get_dense_embedding([query])
+    sparse_vectors = get_sparse_embedding([query])
+
+    dense_vector = dense_vectors[0]
+    sparse_vector = sparse_vectors[0]
+
     search_result = client.query_points(
         collection_name=COLLECTION_NAME,
         prefetch=[
-             {
-                "query":    dense_vector,
-                "using": "dense",
-                "limit": 10
-            },
-
             {
-                "query":    sparse_vector,
+                "query": dense_vector,
+                "using": "dense",
+                "limit": 20,
+            },
+            {
+                "query": sparse_vector,
                 "using": "sparse",
-                "limit": 10
-            }
+                "limit": 20,
+            },
         ],
         
         query=FusionQuery(
             fusion=Fusion.RRF
         ),
-        limit= 5
+        limit= 10
         
         
     )

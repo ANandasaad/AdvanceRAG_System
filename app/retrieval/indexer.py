@@ -14,46 +14,55 @@ from app.embeddings.embedder import (
 
 from app.ingestions.buildmeta_data import build_meta_data
 
-COLLECTION_NAME = "rag_collection"
+from app.retrieval.collection_maper import source_type
 
-
-def index_chunks(chunks, file_path: str):
+def index_chunks(chunks, document):
 
     client = get_qdrant_client()
 
-    points = []
+    collection_name = source_type(document.source_type)
 
-    for i, chunk in enumerate(chunks):
+    texts = []
 
+    for chunk in chunks:
         text = (
             chunk.page_content
             if hasattr(chunk, "page_content")
             else str(chunk)
         )
+        texts.append(text)
 
-        dense = get_dense_embedding(text)
+    dense = get_dense_embedding(texts)
+    sparse = get_sparse_embedding(texts)
 
-        sparse = get_sparse_embedding(text)
+
+    points = []
+
+    for i, chunk in enumerate(chunks):
+
+        text = texts[i]
+
+
         
-        metadata= build_meta_data(file_path, chunk_index=i)
+        
+        metadata= build_meta_data(document, chunk_index=i)
         
         metadata["text"]= text
-        metadata["source"]= chunk.metadata.get("source", "unknown")
-        metadata["page"]= chunk.metadata.get("page", 0)
+        metadata["source_type"]= chunk.metadata.get("source_type", "unknown")
+        metadata["title"]= chunk.metadata.get("title")
 
         point = PointStruct(
 
             id=str(uuid.uuid4()),
-
             vector={
 
                 # dense vector
-                "dense": dense,
+                "dense": dense[i],
 
                 # sparse vector
                 "sparse": SparseVector(
-                    indices=sparse["indices"],
-                    values=sparse["values"]
+                    indices=sparse[i]["indices"],
+                    values=sparse[i]["values"]
                 )
             },
             
@@ -64,10 +73,10 @@ def index_chunks(chunks, file_path: str):
         points.append(point)
 
     client.upsert(
-        collection_name=COLLECTION_NAME,
+        collection_name=collection_name,
         points=points
     )
 
     print(
-        f"Indexed {len(points)} chunks into collection '{COLLECTION_NAME}'."
+        f"Indexed {len(points)} chunks into collection '{collection_name}'."
     )
