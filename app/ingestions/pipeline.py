@@ -3,7 +3,7 @@ from app.ingestions.chunks import chunking
 from app.retrieval.indexer import index_chunks
 from fastapi import HTTPException
 import os
-def pipeline_ingestion(document):
+async def pipeline_ingestion(document):
     
     try:
      # Step 1: Load PDF
@@ -12,7 +12,7 @@ def pipeline_ingestion(document):
      # Step 2: Chunking
      chunks = chunking(document)
     
-     # Step 3: Indexing
+    #  # Step 3: Indexing
      index_chunks(chunks, document)
           
     

@@ -5,10 +5,7 @@ def build_context(documents):
     context=""
     citations=[]
     
-    for i, doc in enumerate(documents):
-        
-        print(doc,"doc-------")
-        
+    for i, doc in enumerate(documents):        
         citation_id = f"{i+1}"
         text= doc["text"]
         doc_id= doc["doc_id"]

@@ -11,12 +11,12 @@ def load_raw_data():
     )
 
     sources = {
-        "slack": 500,
-        "gmail": 500,
-        "confluence": 500,
-        "jira": 1000,
-        "github": 1000,
-        "fireflies": 500
+        "slack": 2,
+        "gmail": 2,
+        "confluence": 2,
+        "jira": 2,
+        "github": 2,
+        "fireflies": 2
     }
 
     subsets = []

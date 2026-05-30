@@ -6,13 +6,17 @@ text_splitter = RecursiveCharacterTextSplitter(
 )
 
 def chunking(document):
+    print("-----------")
+    
+    print(document["source_type"], "source")
     docs=[
         Document(
-            page_content=document.content,
+            page_content=document["content"],
             metadata={
-                "doc_id": document.doc_id,
-                "source_type": document.source_type,
-                "title": document.title
+                "id": document["id"],
+                "doc_id": document["doc_id"],
+                "source_type": document["source_type"],
+                "title": document['title']
             }
         )
     ]

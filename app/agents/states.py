@@ -12,3 +12,9 @@ class GraphState(TypedDict):
     citations: List[Dict[str, Any]]
     confidence:float
     
+
+class QueryGate(TypedDict):
+    query:str
+    retrival_results:List[Dict[str,Any]]
+    rerank_results:List[Dict[str,Any]]
+    topK_results:List[Dict[str,Any]]

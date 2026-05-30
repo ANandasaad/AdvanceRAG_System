@@ -16,11 +16,19 @@ from app.ingestions.buildmeta_data import build_meta_data
 
 from app.retrieval.collection_maper import source_type
 
+def _get_document_attr(document, attr):
+    if isinstance(document, dict):
+        return document.get(attr)
+    return getattr(document, attr, None)
+
+
 def index_chunks(chunks, document):
 
     client = get_qdrant_client()
 
-    collection_name = source_type(document.source_type)
+    collection_name = source_type(
+        _get_document_attr(document, "source_type")
+    )
 
     texts = []
 
@@ -48,8 +56,9 @@ def index_chunks(chunks, document):
         metadata= build_meta_data(document, chunk_index=i)
         
         metadata["text"]= text
-        metadata["source_type"]= chunk.metadata.get("source_type", "unknown")
+        metadata["source_type"]= chunk.metadata.get("source_type")
         metadata["title"]= chunk.metadata.get("title")
+        metadata["id"]=chunk.metadata.get("id")
 
         point = PointStruct(
 
